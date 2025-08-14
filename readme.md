@@ -29,9 +29,12 @@ Viewing db
 ======
 To view data base via browser:
   http://localhost:8080
+  
   username: kompiuterizuoti
+  
   password: insecuredevpassword
 
-To view database in a dedicated app (e.g. TablePlus)
-Go to: mysql://kompiuterizuoti:insecuredevpassword@127.0.0.1:9906/kompiuterizuoti
+To view database in a dedicated app (e.g. TablePlus). Go to: 
+
+mysql://kompiuterizuoti:insecuredevpassword@127.0.0.1:9906/kompiuterizuoti
 
