@@ -9,10 +9,11 @@ Table of Contents
 -----
 - [Setup](#setup)
   * [Project setup](#project-setup)
+- [Viewing project](#viewing-project)
 - [Viewing db](#viewing-db)
-Setu
-======
 
+Setup
+======
 Project setup
 -------------
 1. Clone repository.
@@ -35,3 +36,4 @@ To view data base via browser:
 
 To view database in a dedicated app (e.g. TablePlus)
 [Go to mysql://kompiuterizuoti:insecuredevpassword@127.0.0.1:9906/kompiuterizuoti](mysql://kompiuterizuoti:insecuredevpassword@127.0.0.1:9906/kompiuterizuoti)
+
