@@ -1,0 +1,17 @@
+name: CI
+
+on:
+    pull_request:
+    push:
+        branches:
+            - main
+
+jobs:
+    build:
+        runs-on: ubuntu-24.04
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Up database
+              run: docker compose up -d
