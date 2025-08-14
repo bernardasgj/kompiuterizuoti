@@ -1,0 +1,13 @@
+.is-invalid {
+    border-color: #dc3545 !important;
+}
+.invalid-feedback {
+    color: #dc3545;
+    display: none;
+}
+.show-error {
+    display: block !important;
+}
+#submitButton .spinner-border {
+    margin-left: 5px;
+}
