@@ -33,5 +33,5 @@ To view data base via browser:
   password: insecuredevpassword
 
 To view database in a dedicated app (e.g. TablePlus)
-[Go to mysql://kompiuterizuoti:insecuredevpassword@127.0.0.1:9906/kompiuterizuoti](mysql://kompiuterizuoti:insecuredevpassword@127.0.0.1:9906/kompiuterizuoti)
+Go to: mysql://kompiuterizuoti:insecuredevpassword@127.0.0.1:9906/kompiuterizuoti
 
