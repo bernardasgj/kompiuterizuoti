@@ -17,9 +17,7 @@ Setup
 Project setup
 -------------
 1. Clone repository.
-2. Rename `dist.htaccess` to `.htaccess`
-3. Rename `dist.env` to `.env`
-4. `docker-compose up -d`
+2. `docker-compose up -d`
 This command sets all dependencies needed for php project: db and phpmyadmin
 
 
