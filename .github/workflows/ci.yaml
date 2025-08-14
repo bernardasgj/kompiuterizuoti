@@ -13,5 +13,5 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v3
 
-            - name: Up database
+            - name: Up containers
               run: docker compose up -d
