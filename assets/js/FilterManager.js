@@ -20,15 +20,22 @@ class FilterManager {
      */
     handleFilterSubmit(e) {
         e.preventDefault();
-
         $('#tableLoadingOverlay').show();
-
-        const params = $('#filterForm').serialize();
-        const newUrl = `/posts?${params}`;
-
-        // Save filters in URL without reload
+    
+        const urlParams = new URLSearchParams($('#filterForm').serialize());
+    
+        // preserve current page from URL if present
+        const currentPage = new URLSearchParams(window.location.search).get('page');
+        if (currentPage) {
+            urlParams.set('page', currentPage);
+        } else {
+            urlParams.set('page', 1);
+        }
+    
+        const newUrl = `/posts?${urlParams.toString()}`;
+    
         window.history.pushState({}, '', newUrl);
-
+    
         $.ajax({
             url: newUrl,
             type: 'GET',
@@ -36,12 +43,8 @@ class FilterManager {
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
         .done((data) => {
-            if (data.table) {
-                $('.posts-table').html(data.table);
-            }
-
+            if (data.table) $('.posts-table').html(data.table);
             $('.posts-pagination').html(data.pagination);
-
             ToastManager.show('Posts filtered successfully', 'success');
         })
         .fail((xhr) => {
@@ -49,7 +52,7 @@ class FilterManager {
             ToastManager.show(message, 'danger');
         })
         .always(() => $('#tableLoadingOverlay').hide());
-    }
+    }    
 }
 
 new FilterManager();
