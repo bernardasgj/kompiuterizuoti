@@ -31,7 +31,8 @@ abstract class Repository
     public function createQueryBuilder(string $alias): QueryBuilder
     {
         return (new QueryBuilder($this->connection))
-            ->from($this->table, $alias);
+            ->from($this->table, $alias)
+            ->addSelect("$alias.*");
     }
 
     public function findAll(): array

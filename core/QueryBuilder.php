@@ -71,7 +71,14 @@ class QueryBuilder
 
     public function setOffset(int $offset): self
     {
-        $this->offset = $offset;
+        $this->offset = max(0, $offset);
+        return $this;
+    }    
+
+
+    public function clearSelect(): self
+    {
+        $this->select = [];
         return $this;
     }
 

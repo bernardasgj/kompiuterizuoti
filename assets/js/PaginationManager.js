@@ -75,9 +75,7 @@ class PaginationManager {
                 $('.posts-table').html(data.table);
             }
 
-            if (data.pagination) {
-                $('.posts-pagination').html(data.pagination);
-            }
+            $('.posts-pagination').html(data.pagination);
 
             window.history.pushState({}, '', '?' + urlParams.toString());
         })

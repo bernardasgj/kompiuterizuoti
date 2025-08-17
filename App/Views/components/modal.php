@@ -10,7 +10,6 @@
                 <div class="modal-body">
                     <input type="hidden" name="id" id="postId">
                     <input type="hidden" name="_method" id="formMethod" value="POST">
-                    
                     <div class="mb-3">
                         <label for="person_base_id" class="form-label">Author</label>
                         <select class="form-select" id="person_base_id" name="person_base_id" required>

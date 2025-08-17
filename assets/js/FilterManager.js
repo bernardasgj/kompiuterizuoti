@@ -24,22 +24,23 @@ class FilterManager {
         $('#tableLoadingOverlay').show();
 
         const params = $('#filterForm').serialize();
+        const newUrl = `/posts?${params}`;
+
+        // Save filters in URL without reload
+        window.history.pushState({}, '', newUrl);
 
         $.ajax({
-            url: `/posts?${params}`,
+            url: newUrl,
             type: 'GET',
             dataType: 'json',
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
         .done((data) => {
-            console.log("DATA:", data)
             if (data.table) {
                 $('.posts-table').html(data.table);
             }
 
-            if (data.pagination) {
-                $('.posts-pagination').html(data.pagination);
-            }
+            $('.posts-pagination').html(data.pagination);
 
             ToastManager.show('Posts filtered successfully', 'success');
         })
