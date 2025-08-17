@@ -30,11 +30,11 @@ class CrudManager {
         e.preventDefault();
         const $button = $(e.currentTarget);
         const postId = $button.data('id');
-    
+
         if (!confirm('Are you sure you want to delete this post?')) return;
 
         $('#tableLoadingOverlay').show();
-        
+
         $.ajax({
             url: `/posts/${postId}`,
             type: 'DELETE',
@@ -42,16 +42,16 @@ class CrudManager {
             headers: {'X-Requested-With': 'XMLHttpRequest'}
         })
         .done(() => {
-            // Remove post row after fade out animation
-            $button.closest('tr').fadeOut(() => $(this).remove());
             ToastManager.show('Post deleted successfully');
+            this.refreshTable();
         })
         .fail((xhr) => {
             const message = xhr.responseJSON?.message || 'Error deleting post';
             ToastManager.show(message, 'danger');
         })
-        .always(() => {$('#tableLoadingOverlay').hide()})
+        .always(() => { $('#tableLoadingOverlay').hide(); });
     }
+
   
     /**
      * Handle edit button click: either load post data for editing or open empty form for creation.
@@ -151,13 +151,12 @@ class CrudManager {
     }
 
     /**
-     * Refresh posts table with current filter parameters via AJAX.
+     * Refresh posts table and pagination with current filter parameters via AJAX.
      */
     refreshTable() {
         $('#tableLoadingOverlay').show();
-    
+
         const currentPage = $('#pageInput').val() || 1;
-    
         // Ensure page param is kept when refreshing
         // Probably should go to the page the post is located in but since we can edit theoretically immutable
         // created_at DateTime and we can create with past date it seems a bit silly to do anything but preserve page here as random jumps
@@ -171,7 +170,12 @@ class CrudManager {
             headers: {'X-Requested-With': 'XMLHttpRequest'}
         })
         .done((data) => {
-            $('.posts-table').html(data.table);
+            if (data.table) {
+                $('.posts-table').html(data.table);
+            }
+            if (data.pagination) {
+                $('.pagination-container').replaceWith(data.pagination);
+            }
         })
         .fail((xhr) => {
             const message = xhr.responseJSON?.message || 'Error refreshing posts';
@@ -179,7 +183,6 @@ class CrudManager {
         })
         .always(() => $('#tableLoadingOverlay').hide());
     }
-    
 
     /**
      * Handle errors from form submission.
