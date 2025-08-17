@@ -7,7 +7,6 @@ class DateRangeValidator {
     init() {
         this.inputs.forEach(input => {
             input.addEventListener('change', () => this.updateRange(input));
-            // Set initial min/max on page load
             this.updateRange(input);
         });
     }
@@ -20,14 +19,13 @@ class DateRangeValidator {
         if (!targetInput) return;
 
         if (rangeType === 'min') {
-            // from_date: set min on to_date
             targetInput.min = changedInput.value || '';
-        } else if (rangeType === 'max') {
-            // to_date: set max on from_date
+        } 
+        
+        if (rangeType === 'max') {
             targetInput.max = changedInput.value || '';
         }
 
-        // Correct any invalid current value
         if (targetInput.value) {
             if (rangeType === 'min' && targetInput.value < changedInput.value) {
                 targetInput.value = changedInput.value;
