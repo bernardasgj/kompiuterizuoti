@@ -2,6 +2,9 @@
 
 namespace Core;
 
+use RuntimeException;
+use DateTime;
+
 class Request {
     private array $queryParams;
     private array $requestData;
@@ -36,7 +39,9 @@ class Request {
     }
 
     public function getQueryParam(string $key, $default = null) {
-        return isset($this->queryParams[$key]) && $this->queryParams[$key] ? $this->queryParams[$key] : $default;
+        return isset($this->queryParams[$key]) && $this->queryParams[$key] !== ''
+            ? $this->queryParams[$key]
+            : $default;
     }
 
     public function getRequestData(): array {
@@ -65,5 +70,42 @@ class Request {
 
     public function getUri(): string {
         return $this->uri;
+    }
+
+    public function getIntQueryParam(string $key, ?int $default = null, bool $positive = true): ?int {
+        $value = $this->getQueryParam($key);
+        if ($value === null) {
+            return $default;
+        }
+
+        if (!ctype_digit((string)$value)) {
+            throw new RuntimeException("Invalid parameter '{$key}': must be an integer, given {$value}");
+        }
+
+        $intVal = (int)$value;
+        if ($positive && $intVal <= 0) {
+            throw new RuntimeException("Invalid parameter '{$key}': must be a positive integer, given {$value}");
+        }
+        return $intVal;
+    }
+
+    public function getDateQueryParam(
+        string $key,
+        ?string $default = null,
+        string $format = 'Y-m-d'
+    ): ?string {
+        $value = $this->getQueryParam($key);
+        if ($value === null) {
+            return $default
+                ? DateTime::createFromFormat($format, $default)->format($format)
+                : null;
+        }
+    
+        $d = DateTime::createFromFormat($format, $value);
+        if (!$d || $d->format($format) !== $value) {
+            throw new RuntimeException("Invalid parameter '{$key}': must be in format {$format}, given {$value}");
+        }
+    
+        return $d->format($format);
     }
 }
