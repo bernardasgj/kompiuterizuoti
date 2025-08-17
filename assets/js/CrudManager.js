@@ -91,12 +91,8 @@ class CrudManager {
         $('#person_base_id').val(postData.person_base_id);
         $('#content').val(postData.content);
 
-        console.log(postData.id, postData.created_at);
-        // Convert "YYYY-MM-DD HH:MM:SS" → "YYYY-MM-DDTHH:MM"
         const formattedDate = postData.created_at.replace(' ', 'T').slice(0, 16);
         $('#created_at').val(formattedDate);
-
-        // $('#created_at').val(formattedDate);
         
         $('#postModal').modal('show');
     }
@@ -158,8 +154,15 @@ class CrudManager {
      * Refresh posts table with current filter parameters via AJAX.
      */
     refreshTable() {
-        $('#tableLoadingOverlay').show()
-        const params = $('#filterForm').serialize();
+        $('#tableLoadingOverlay').show();
+    
+        const currentPage = $('#pageInput').val() || 1;
+    
+        // Ensure page param is kept when refreshing
+        // Probably should go to the page the post is located in but since we can edit theoretically immutable
+        // created_at DateTime and we can create with past date it seems a bit silly to do anything but preserve page here as random jumps
+        // seemingly will kill UX
+        const params = $('#filterForm').serialize() + `&page=${currentPage}`;
         
         $.ajax({
             url: `/posts?${params}`,
@@ -176,6 +179,7 @@ class CrudManager {
         })
         .always(() => $('#tableLoadingOverlay').hide());
     }
+    
 
     /**
      * Handle errors from form submission.

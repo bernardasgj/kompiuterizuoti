@@ -5,6 +5,9 @@
  */
 class PaginationManager {
     constructor() {
+        // Track the currently selected perPage value in JS state
+        this.currentPerPage = null;
+
         this.initEvents();
     }
 
@@ -25,23 +28,30 @@ class PaginationManager {
             e.preventDefault();
             const perPage = $(e.currentTarget).data('per-page');
             if (!perPage) return;
+
+            this.currentPerPage = perPage;
+
             this.changePerPage(perPage);
         });
     }
 
     /**
      * Load a specific table's page while keeping other filters intact.
+     * Ensures per_page is preserved between page navigations.
      * @param {number} page - The page number to load
      */
     loadPage(page) {
         const urlParams = new URLSearchParams($('#filterForm').serialize());
-        console.log('HERE',urlParams)
 
         urlParams.set('page', page);
-        console.log('HERE',page)
+
+        const effectivePerPage =
+            this.currentPerPage ||
+            $('#perPageDropdown').text().match(/\d+/)[0];
+
+        urlParams.set('per_page', effectivePerPage);
 
         this.fetchPosts(urlParams);
-        console.log('HERE')
     }
 
     /**
@@ -53,6 +63,7 @@ class PaginationManager {
         const urlParams = new URLSearchParams($('#filterForm').serialize());
         urlParams.set('per_page', perPage);
         urlParams.set('page', 1);
+
         this.fetchPosts(urlParams);
     }
 
