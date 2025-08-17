@@ -74,12 +74,10 @@ class Router
 
         // Match dynamic routes with parameters
         foreach ($this->routes[$method] as $route => $handler) {
-            // Convert route placeholders {param} to named regex groups
             $pattern = preg_replace('/\{([^}]+)\}/', '(?P<$1>[^/]+)', $route);
             $pattern = "#^$pattern$#";
 
             if (preg_match($pattern, $uri, $matches)) {
-                // Extract only named parameters
                 $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
                 $request->setRouteParams($params);
                 
@@ -110,7 +108,6 @@ class Router
         $controller = new $handler['controller']();
         $action = $handler['action'];
 
-        // Prepare arguments by checking parameter type hints
         $methodParams = (new ReflectionMethod($controller, $action))->getParameters();
         $args = [];
 

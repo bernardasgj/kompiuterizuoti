@@ -54,7 +54,7 @@ class PostRepository extends Repository
         ?string $toDate
     ) {
         $qb = $this->createQueryBuilder('p')
-            ->andWhere('1=1'); // optional dummy condition
+            ->andWhere('1=1'); // dummy condition
     
         $qb->innerJoin(
             'person',
