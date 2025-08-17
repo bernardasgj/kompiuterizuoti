@@ -22,7 +22,7 @@
                     <h3 class="card-title">Puslapis nerastas</h3>
                     <p class="card-text">Puslapis, kurio ieškote neegzistuoja</p>
                     <a href="/" class="btn btn-primary">
-                        <i class="fas fa-home me-2"></i>Į pradžios puslapį
+                        <i class="fas fa-home me-2"></i>Į pradžios puslapį ->
                     </a>
                 </div>
             </div>
