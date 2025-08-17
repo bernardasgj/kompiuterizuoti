@@ -22,15 +22,15 @@ class PostRepository extends Repository
     ): array {
         $qb = $this->buildGroupAndDateRangeQuery($groupId, $fromDate, $toDate)
             ->orderBy('p.created_at', 'DESC');
-
+    
         if ($limit !== null) {
             $qb->setLimit($limit);
         }
-
+    
         if ($offset !== null) {
             $qb->setOffset($offset);
         }
-
+    
         return $this->mapResults($qb->fetchAll());
     }
 
@@ -39,12 +39,14 @@ class PostRepository extends Repository
         ?string $fromDate = null,
         ?string $toDate = null
     ): int {
-        $qb = $this->buildGroupAndDateRangeQuery($groupId, $fromDate, $toDate)
-            ->addSelect('COUNT(*) AS total');
-
+        $qb = $this->buildGroupAndDateRangeQuery($groupId, $fromDate, $toDate);
+    
+        $qb->clearSelect()
+           ->addSelect('COUNT(*) AS total');
+    
         $result = $qb->fetchOne();
         return (int) ($result['total'] ?? 0);
-    }
+    }    
 
     private function buildGroupAndDateRangeQuery(
         ?int $groupId,
@@ -52,23 +54,34 @@ class PostRepository extends Repository
         ?string $toDate
     ) {
         $qb = $this->createQueryBuilder('p')
-            ->from($this->table, 'p')
-            ->andWhere('1=1');
-            ;
-
+            ->andWhere('1=1'); // optional dummy condition
+    
+        $qb->innerJoin(
+            'person',
+            'pe',
+            'pe.base_id = p.person_base_id AND pe.valid_from = (
+                SELECT MAX(pe2.valid_from)
+                FROM person AS pe2
+                WHERE pe2.base_id = p.person_base_id
+                    AND pe2.valid_from < p.created_at
+            )'
+        )
+        ->innerJoin('groups', 'g', 'g.id = pe.group_id');
+        
         if ($groupId) {
-            $qb->innerJoin('person', 'pe', 'p.person_base_id = pe.id')
-               ->andWhere('pe.group_id = ?', $groupId);
+            $qb->andWhere('pe.group_id = ?', $groupId);
         }
-
+    
         if ($fromDate) {
-            $qb->andWhere('p.created_at >= ?', $fromDate);
+            $from = (new \DateTimeImmutable($fromDate))->setTime(0, 0, 0);
+            $qb->andWhere('p.created_at >= ?', $from->format('Y-m-d H:i:s'));
         }
-
+    
         if ($toDate) {
-            $qb->andWhere('p.created_at <= ?', $toDate);
+            $to = (new \DateTimeImmutable($toDate))->setTime(23, 59, 59);
+            $qb->andWhere('p.created_at <= ?', $to->format('Y-m-d H:i:s'));
         }
-
+    
         return $qb;
-    }
+    }    
 }

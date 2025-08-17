@@ -9,8 +9,8 @@ CREATE TABLE IF NOT EXISTS `groups` (
 CREATE TABLE IF NOT EXISTS `person` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `base_id` int(11) NOT NULL,
-    `name` varchar(255) NOT NULL,
-    `surname` varchar(255) NOT NULL,
+    `name` varchar(32) NOT NULL,
+    `surname` varchar(32) NOT NULL,
     `group_id` int(11) NOT NULL,
     `valid_from` datetime NOT NULL,
     PRIMARY KEY (`id`),

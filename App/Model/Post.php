@@ -31,6 +31,12 @@ class Post implements Model {
     }
 
     public function _getPerson(): Person {
+        $person = $this->personRepository->findByWithDateRange(
+            criteria: ['base_id' => $this->person_base_id],
+            orderBy: ['valid_from' => 'DESC'],
+            dateTo: $this->getCreatedAt()->format('Y-m-d H:m:i'),
+        );
+        // var_dump($this->getCreatedAt()->format('Y-m-d H:m:i'), $person);
         return $this->personRepository->findByWithDateRange(
             criteria: ['base_id' => $this->person_base_id],
             orderBy: ['valid_from' => 'DESC'],
@@ -67,7 +73,7 @@ class Post implements Model {
             'id' => $this->id,
             'person_base_id' => $this->person_base_id,
             'content' => $this->content,
-            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'created_at' => $this->created_at->format('Y-m-d\TH:i'),
         ];
     }
 

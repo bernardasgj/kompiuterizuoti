@@ -90,10 +90,13 @@ class CrudManager {
         $('#postId').val(postData.id);
         $('#person_base_id').val(postData.person_base_id);
         $('#content').val(postData.content);
-        
-        const createdAt = new Date(postData.created_at);
-        const formattedDate = createdAt.toISOString().slice(0, 16);
+
+        console.log(postData.id, postData.created_at);
+        // Convert "YYYY-MM-DD HH:MM:SS" → "YYYY-MM-DDTHH:MM"
+        const formattedDate = postData.created_at.replace(' ', 'T').slice(0, 16);
         $('#created_at').val(formattedDate);
+
+        // $('#created_at').val(formattedDate);
         
         $('#postModal').modal('show');
     }

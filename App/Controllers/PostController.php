@@ -14,6 +14,8 @@ use DateTime;
 use Exception;
 
 class PostController extends Controller {
+    const DEFAULT_ITEMS_PER_PAGE = 10;
+
     private PostRepository $postRepository;
     private PersonRepository $personRepository;
     private GroupRepository $groupRepository;
@@ -28,11 +30,11 @@ class PostController extends Controller {
 
     #[Route('/posts', 'GET')]
     public function index(Request $request) {
-        $groupId = (int) $request->getQueryParam('group_id');
-        $fromDate = $request->getQueryParam('from_date');
-        $toDate = $request->getQueryParam('to_date');
-        $page = (int) $request->getQueryParam('page', 1);
-        $perPage = (int) $request->getQueryParam('per_page', 10);
+        $groupId  = $request->getIntQueryParam('group_id', null, true);
+        $page     = $request->getIntQueryParam('page', 1, true);
+        $perPage  = $request->getIntQueryParam('per_page', self::DEFAULT_ITEMS_PER_PAGE, true);
+        $fromDate = $request->getDateQueryParam('from_date');
+        $toDate   = $request->getDateQueryParam('to_date'); 
 
         $totalPosts = $this->postRepository->countByGroupAndDateRange(
             groupId: $groupId,

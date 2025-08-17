@@ -1,6 +1,8 @@
 <?php
 
 use Core\Router;
+use Core\ExceptionHandler;
+
 
 spl_autoload_register(function ($className) {
     $classPath = str_replace('\\', '/', $className);
@@ -11,6 +13,7 @@ spl_autoload_register(function ($className) {
     }
 });
 
+require_once __DIR__ . '/core/ExceptionHandler.php';
 require_once __DIR__ . '/core/Request.php';
 require_once __DIR__ . '/core/Attributes/Route.php';
 require_once __DIR__ . '/core/Router.php';
@@ -19,6 +22,7 @@ require_once __DIR__ . '/core/Database.php';
 require_once __DIR__ . '/core/Model.php';
 require_once __DIR__ . '/core/Repository.php';
 require_once __DIR__ . '/core/QueryBuilder.php';
+ExceptionHandler::register(true);
 
 $router = new Router();
 $router->dispatch();
