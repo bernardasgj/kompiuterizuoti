@@ -19,6 +19,7 @@ class Post implements Model {
         #[NotNull(message: 'Author ID cannot be null')]
         private ?int $person_base_id,
         #[NotBlank(message: 'Content cannot be blank')]
+        #[NotNull(message: 'Content cannot be null')]
         private ?string $content,
         #[NotNull(message: 'Creation date cannot be null')]
         private ?DateTime $created_at,
