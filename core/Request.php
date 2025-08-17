@@ -79,12 +79,12 @@ class Request {
         }
 
         if (!ctype_digit((string)$value)) {
-            throw new RuntimeException("Invalid parameter '{$key}': must be an integer, given {$value}");
+            throw new RuntimeException("Invalid parameter '{$key}': must be an integer, given '{$value}'");
         }
 
         $intVal = (int)$value;
         if ($positive && $intVal <= 0) {
-            throw new RuntimeException("Invalid parameter '{$key}': must be a positive integer, given {$value}");
+            throw new RuntimeException("Invalid parameter '{$key}': must be a positive integer, given '{$value}'");
         }
         return $intVal;
     }
@@ -94,18 +94,25 @@ class Request {
         ?string $default = null,
         string $format = 'Y-m-d'
     ): ?string {
-        $value = $this->getQueryParam($key);
+        $value = $this->getQueryParam($key) ?? $default;
+    
         if ($value === null) {
-            return $default
-                ? DateTime::createFromFormat($format, $default)->format($format)
-                : null;
+            return null;
         }
     
-        $d = DateTime::createFromFormat($format, $value);
-        if (!$d || $d->format($format) !== $value) {
-            throw new RuntimeException("Invalid parameter '{$key}': must be in format {$format}, given {$value}");
+        $patterns = [
+            'Y-m-d' => '/^\d{4}-\d{2}-\d{2}$/',
+        ];
+    
+        $regex = $patterns[$format] ?? null;
+        if (!$regex) {
+            throw new RuntimeException("Unsupported date format '{$format}'");
         }
     
-        return $d->format($format);
+        if (!preg_match($regex, $value)) {
+            throw new RuntimeException("Invalid parameter '{$key}': must be in format {$format}, given '{$value}'");
+        }
+    
+        return $value;
     }
 }
