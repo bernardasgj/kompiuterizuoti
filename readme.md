@@ -3,7 +3,7 @@ Kompiuterizuoti test
 
 Test project for job application in kompiuterizuoti meant to test basics of php, html, css and js
 
-Note: if using Windows you'll need to setup [WSL.2 for docker to work](https://code.visualstudio.com/docs/remote/wsl).
+Note: if using Windows you'll might need to setup [WSL.2 for docker to work](https://code.visualstudio.com/docs/remote/wsl).
 
 Table of Contents
 -----
